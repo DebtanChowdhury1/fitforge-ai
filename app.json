@@ -1,25 +1,44 @@
 {
   "expo": {
-    "name": "fitforge-ai",
+    "name": "FitForge AI",
     "slug": "fitforge-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "scheme": "fitforge",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.fitforge.ai",
+      "infoPlist": {}
     },
     "android": {
+      "package": "com.fitforge.ai",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "backgroundColor": "#18181b"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#f97316"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4e950ca6-9414-4743-a899-f23f4806e21c"
+      }
+    },
+    "owner": "dc2026"
   }
 }

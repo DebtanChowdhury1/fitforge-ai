@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>FitForge Icon</title></head>
+<body style="margin:0;background:#000;">
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const S = 1024;
+
+// Background — deep dark gradient with subtle radial glow
+const bg = ctx.createRadialGradient(S/2, S/2, 60, S/2, S/2, S*0.72);
+bg.addColorStop(0,   '#1a0a00');
+bg.addColorStop(0.4, '#0f0810');
+bg.addColorStop(1,   '#06060d');
+ctx.fillStyle = bg;
+ctx.beginPath();
+ctx.roundRect(0, 0, S, S, 200);
+ctx.fill();
+
+// Outer glow halo
+const halo = ctx.createRadialGradient(S/2, S/2, 120, S/2, S/2, S*0.6);
+halo.addColorStop(0,   'rgba(255,107,53,0.12)');
+halo.addColorStop(0.5, 'rgba(191,90,242,0.06)');
+halo.addColorStop(1,   'transparent');
+ctx.fillStyle = halo;
+ctx.fillRect(0, 0, S, S);
+
+// --- Lightning bolt path (F mark / bolt) ---
+// Center it nicely: bolt from top-center to bottom-center
+ctx.save();
+ctx.translate(S/2, S/2);
+
+// Subtle inner plate (rounded rect)
+const plate = ctx.createLinearGradient(-200, -200, 200, 200);
+plate.addColorStop(0, 'rgba(255,107,53,0.10)');
+plate.addColorStop(1, 'rgba(191,90,242,0.06)');
+ctx.fillStyle = plate;
+ctx.beginPath();
+ctx.roundRect(-200, -200, 400, 400, 80);
+ctx.fill();
+
+// Ring circuit lines (decorative arcs)
+ctx.strokeStyle = 'rgba(255,107,53,0.18)';
+ctx.lineWidth = 3;
+ctx.setLineDash([12, 14]);
+ctx.beginPath();
+ctx.arc(0, 0, 250, -Math.PI * 0.65, Math.PI * 0.65);
+ctx.stroke();
+ctx.beginPath();
+ctx.arc(0, 0, 250, Math.PI * 0.35, Math.PI * 1.65);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// Corner accent dots
+[[230, -230], [230, 230], [-230, 230], [-230, -230]].forEach(([x, y]) => {
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,107,53,0.5)';
+  ctx.fill();
+});
+
+// Lightning bolt — main mark
+// Bolt path: top-right → center-left → center-right → bottom-left
+const boltPts = [
+  [50, -230],   // top of bolt
+  [-10, -30],   // left knee
+  [70, -30],    // right knee
+  [-50, 230],   // bottom of bolt
+  [20, 30],     // left inner
+  [-60, 30],    // right inner
+];
+
+// Shadow / depth layer
+ctx.shadowColor = 'rgba(255,50,0,0.8)';
+ctx.shadowBlur = 60;
+ctx.shadowOffsetX = 0;
+ctx.shadowOffsetY = 8;
+
+const bolt = ctx.createLinearGradient(0, -230, 0, 230);
+bolt.addColorStop(0,   '#FF8C35');
+bolt.addColorStop(0.4, '#FF6B35');
+bolt.addColorStop(0.7, '#FF3D00');
+bolt.addColorStop(1,   '#cc1a00');
+
+ctx.beginPath();
+ctx.moveTo(boltPts[0][0], boltPts[0][1]);
+ctx.lineTo(boltPts[1][0], boltPts[1][1]);
+ctx.lineTo(boltPts[2][0], boltPts[2][1]);
+ctx.lineTo(boltPts[3][0], boltPts[3][1]);
+ctx.lineTo(boltPts[4][0], boltPts[4][1]);
+ctx.lineTo(boltPts[5][0], boltPts[5][1]);
+ctx.closePath();
+ctx.fillStyle = bolt;
+ctx.fill();
+
+// Inner bright highlight on bolt
+ctx.shadowBlur = 0;
+const boltHL = ctx.createLinearGradient(0, -200, 0, 0);
+boltHL.addColorStop(0, 'rgba(255,255,200,0.45)');
+boltHL.addColorStop(1, 'rgba(255,200,100,0)');
+ctx.fillStyle = boltHL;
+ctx.beginPath();
+ctx.moveTo(boltPts[0][0], boltPts[0][1]);
+ctx.lineTo(boltPts[1][0], boltPts[1][1]);
+ctx.lineTo(boltPts[2][0], boltPts[2][1]);
+ctx.lineTo(40, -200);
+ctx.closePath();
+ctx.fill();
+
+// Bolt stroke outline — subtle glow edge
+ctx.strokeStyle = 'rgba(255,180,80,0.6)';
+ctx.lineWidth = 2.5;
+ctx.lineJoin = 'round';
+ctx.beginPath();
+ctx.moveTo(boltPts[0][0], boltPts[0][1]);
+ctx.lineTo(boltPts[1][0], boltPts[1][1]);
+ctx.lineTo(boltPts[2][0], boltPts[2][1]);
+ctx.lineTo(boltPts[3][0], boltPts[3][1]);
+ctx.lineTo(boltPts[4][0], boltPts[4][1]);
+ctx.lineTo(boltPts[5][0], boltPts[5][1]);
+ctx.closePath();
+ctx.stroke();
+
+// Center orb spark — tiny bright core
+const spark = ctx.createRadialGradient(10, -20, 0, 10, -20, 40);
+spark.addColorStop(0, 'rgba(255,255,255,0.9)');
+spark.addColorStop(0.4, 'rgba(255,200,100,0.5)');
+spark.addColorStop(1, 'transparent');
+ctx.fillStyle = spark;
+ctx.beginPath();
+ctx.arc(10, -20, 40, 0, Math.PI * 2);
+ctx.fill();
+
+// Energy sparks radiating from bolt
+const sparks = [
+  [90, -180, 130, -215],
+  [100, -80, 145, -75],
+  [-80, 100, -120, 115],
+  [-90, 180, -130, 215],
+];
+sparks.forEach(([x1, y1, x2, y2]) => {
+  ctx.strokeStyle = 'rgba(255,180,50,0.7)';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  // Endpoint dot
+  ctx.beginPath();
+  ctx.arc(x2, y2, 4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,200,80,0.9)';
+  ctx.fill();
+});
+
+ctx.restore();
+
+// Bottom text "FF" subtle watermark? No — keep it clean.
+// App icon is done.
+
+// Download
+const a = document.createElement('a');
+a.download = 'icon.png';
+a.href = c.toDataURL('image/png');
+a.textContent = 'DOWNLOAD ICON.PNG';
+a.style.cssText = 'display:block;margin:16px;color:#ff6b35;font-family:monospace;font-size:18px;';
+document.body.appendChild(a);
+</script>
+</body>
+</html>
