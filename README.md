@@ -50,7 +50,7 @@ Or browse all versions on the [Releases page](../../releases).
 ```bash
 git clone https://github.com/YOUR_USERNAME/fitforge-ai.git
 cd fitforge-ai
-npm install --legacy-peer-deps
+npm install
 ```
 
 ### 2. Environment variables
